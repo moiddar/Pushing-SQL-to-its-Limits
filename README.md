@@ -4,19 +4,19 @@
 <br>
 
 ### High Level Summary
-We're going to be pushing SQL (Snowflake) to its limits by applying advanced analytic techniques that are better suited for languages like Python or R. Applying them in SQL forces us to gain a deeper understanding of any algorithms we use instead of relying on pre-built libraries or funcitons. It'll also improve our day to day SQL ability the same way intense exercise at the gym can make day to day stuff like climbing a flight of stairs easier. There's also several use cases where working directly in SQL is faster and cheaper than developing infrastructure for other languages. 
+We're going to be pushing SQL (Snowflake) to its limits by applying advanced analytic techniques that are better suited for languages like Python or R. Applying them in SQL forces us to gain a deeper understanding of any algorithms we use instead of relying on pre-built libraries or functions. It'll also improve our day to day SQL ability the same way intense exercise at the gym can make day to day stuff like climbing a flight of stairs easier. There's also several use cases where working directly in SQL is faster and cheaper than developing infrastructure for other languages. 
 <br>
 
-We will conduct an Exploratory Data Analysis and implement an Associate Rule Learning Algorithm (Equivelence Class Clustering and bottom-up Lattice Traversal). 
+We will conduct an Exploratory Data Analysis and implement an Associate Rule Learning Algorithm (Equivalence Class Clustering and bottom-up Lattice Traversal). 
 <br>
 
 The dataset we're using is a sample of real transaction data from a Brazilian E-Commerce Site. 
 <br>
 
-In the EDA, we focused on logistics, inspired by how Amazon dominated the competition by mastering shipping and distribution. We spotted that our customers were generally clustered around two cities: São Paulo and Fortaleza. Our sellers, on the other hand, were mostly in São Paulo. This meant the customers in Fortaleza experienced long shipping times of ¬18 days. Our reccomendation was to open a distribution centre closer to Fortaleza to reduce that average shipping time by 78% to only 4 days. 
+In the EDA, we focused on logistics, inspired by how Amazon dominated the competition by mastering shipping and distribution. We spotted that our customers were generally clustered around two cities: São Paulo and Fortaleza. Our sellers, on the other hand, were mostly in São Paulo. This meant the customers in Fortaleza experienced long shipping times of ¬18 days. Our recommendation was to open a distribution centre closer to Fortaleza to reduce that average shipping time by 78% to only 4 days. 
 <br>
 
-When you order pizza from dominos, before you can checkout you're shown a pop up with items that they think you'd like based on what you've already added to your cart. Product recommendations are a highly effective cross selling technique that 54% of retailers say is the key driver of AOV with 75% of customers more likely to purchase based on personalized recommendations [Liefsight.io]. We applied the ECLAT algorithm to create product recommendations for our store. Our top 3 recommendations are: bed, bath, and tables when furniture decor is purchased; cool stuff when baby products are purchased; and toys when baby products are purchased. 
+When you order pizza from dominos, before you can checkout you're shown a pop up with items that they think you'd like based on what you've already added to your cart. Product recommendations are a highly effective cross selling technique that 54% of retailers say is the key driver of AOV with 75% of customers more likely to purchase based on personalized recommendations [Liefsight.io]. We applied the ECLAT algorithm to create product recommendations for our store. Our top 3 recommendations are: bed, bath, and tables when furniture décor is purchased; cool stuff when baby products are purchased; and toys when baby products are purchased. 
 <br>
 <br>
 <br>
@@ -110,7 +110,7 @@ WHERE geolocation_zip_code_prefix IN (
 <br>
 
 
-We also have a difference of 775 unique order_ids between the "orders" and "order items" tables. The data comes from a real database so this difference is likely due to desync occuring between the two tables when the snapshot was taken. We're only going to be using orders that appear in both tables in this analysis so we don't need to do any transformations at this stage.
+We also have a difference of 775 unique order_ids between the "orders" and "order items" tables. The data comes from a real database so this difference is likely due to desync occurring between the two tables when the snapshot was taken. We're only going to be using orders that appear in both tables in this analysis so we don't need to do any transformations at this stage.
 <br>
 <br>
 <br>
@@ -118,7 +118,7 @@ We also have a difference of 775 unique order_ids between the "orders" and "orde
 
 
 ### Stage 3: Analysis
-Brazil is a large country geogrpahically speaking, the largest order distance in the dataset is nearly 4000km or about 2500 miles. One of the biggest areas of improvement for cusotmer satisfaction as well as cost reduction will be the logistics of shipping. This ecommerce site operates as a marketplace and marketplace companies like Amazon have dominated market share by mastering logistics.
+Brazil is a large country geographically speaking, the largest order distance in the dataset is nearly 4000km or about 2500 miles. One of the biggest areas of improvement for customer satisfaction as well as cost reduction will be the logistics of shipping. This ecommerce site operates as a marketplace and marketplace companies like Amazon have dominated market share by mastering logistics.
 <br>
 ```sql
 SELECT 
@@ -154,7 +154,7 @@ AND seller_lat IS NOT NULL
 ```
 <br>
 
-From a visual inspection of the distribution of sellers and customers we can see that customers are clustered around São Paulo and Fortaleza which is to be expected because these areas have high populations. Our sellers, however, are predominantly in São Paulo. One potential path forward could be to open a distribution centre closer to Fortaleza that sellers in São Paulo can hold stock in. This would greatly reduce shipping times as well as freight cost to the business. The distance between São Paulo and Fortaleza is aroudn 2000km, orders of this distance have an average delivery time of 18 days. Opening a distribution centre in Fortaleza would bring the order distance to the sub 200km category which has an average delivery time for 4 days. This presents a 78% reduction in delivery time, increasing customer satisfaction for a large proportion of customers. We can imrpove this delivery time further by implementing route optimisation algorithms. 
+From a visual inspection of the distribution of sellers and customers we can see that customers are clustered around São Paulo and Fortaleza which is to be expected because these areas have high populations. Our sellers, however, are predominantly in São Paulo. One potential path forward could be to open a distribution centre closer to Fortaleza that sellers in São Paulo can hold stock in. This would greatly reduce shipping times as well as freight cost to the business. The distance between São Paulo and Fortaleza is around 2000km, orders of this distance have an average delivery time of 18 days. Opening a distribution centre in Fortaleza would bring the order distance to the sub 200km category which has an average delivery time for 4 days. This presents a 78% reduction in delivery time, increasing customer satisfaction for a large proportion of customers. We can improve this delivery time further by implementing route optimisation algorithms. 
 
 ![seller map](https://github.com/user-attachments/assets/d0e6b387-b720-4121-ac89-8ec64503fb5e)
 
@@ -175,7 +175,7 @@ We can apply these algorithms to our dataset to find out what products (B) we sh
 We're going to use the ECLAT Algorithm which stands for Equivalence Class Clustering and bottom-up Lattice Traversal. It's popular because it's a faster and more efficient version of the Apriori Algorithm since it operates in a depth first manner (vertical) rather than a breadth first manner (horizontal). With Apriori you need to scan the entire database multiple times whereas with ECLAT you just need to interset the tidsets. 
 <br>
 
-The first thing we need to do is define our minimum support. The minimum support in this context is the mininmum number of orders a product category needs to have for us to consider it in the analysis, we're going to set this value to 1% of the total orders dynamically using a session variable so that it can expand as the dataset expands with more orders.
+The first thing we need to do is define our minimum support. The minimum support in this context is the minimum number of orders a product category needs to have for us to consider it in the analysis, we're going to set this value to 1% of the total orders dynamically using a session variable so that it can expand as the dataset expands with more orders.
 ```sql
 SET minimum_support = (
     SELECT 
@@ -236,7 +236,7 @@ WHERE occurance > $minimum_support
 </tr>
 </table>
 
-The next step in the process is to create itemset pairs and see how many orders have both product categories in them. For example, we would join cool_stuff and pet_shop together to form an itemset {cool_stuf,pet_shop} and then count how many orders have products from both of these categories in them. In SQL this can get a little difficult but you can do it with a creative approach. 
+The next step in the process is to create itemset pairs and see how many orders have both product categories in them. For example, we would join cool_stuff and pet_shop together to form an itemset {cool_stuff,pet_shop} and then count how many orders have products from both of these categories in them. In SQL this can get a little difficult but you can do it with a creative approach. 
 <br>
 
 To create the itemsets you take the distinct product categories and join them to themselves. You then put these two columns into an array. This array, however, will have duplicates in it as when you do the self join you'll end up with things like {cool_stuff,pet_shop} and {pet_shop,cool_stuff} which is the same itemset. To get around this you can sort the array alphabetically so that both arrays become {cool_stuff,pet_shop} then take only the distinct arrays. 
@@ -301,7 +301,7 @@ ORDER BY 2 desc
 <br>
 <br>
 
-The occurance for all of these itemsets is below the initial minimum support we defined. The reason for this is that the dataset we're using is a sample of the actual full orders dataset. To account for this we're going to recalculate our minimum support at each interation but this time with 2.5% of total orders instead of 1%. This time, since we need ot use the result of a common table expression, we can't set it as a session variable and we have to create another CTE to house it. 
+The occurrence for all of these itemsets is below the initial minimum support we defined. The reason for this is that the dataset we're using is a sample of the actual full orders dataset. To account for this we're going to recalculate our minimum support at each iteration but this time with 2.5% of total orders instead of 1%. This time, since we need to use the result of a common table expression, we can't set it as a session variable and we have to create another CTE to house it. 
 <br>
 ```sql
 ...
@@ -389,7 +389,7 @@ LEFT JOIN order_array as o3
 <br>
 <br>
 
-For our 3 product itemsets, we don't have any itemsets that have an occurance above our minimum support. This means our frequent itemsets stop at two product categories. We can now generate the itemset lattice:
+For our 3 product itemsets, we don't have any itemsets that have an occurrence above our minimum support. This means our frequent itemsets stop at two product categories. We can now generate the itemset lattice:
 
 <table>
 <tr>
@@ -473,7 +473,7 @@ LEFT JOIN itemset_lattice as i2
 ```
 <br>
 
-The highest confidence we have for any association rule is 1.1%. This is much lower than typical minimum confidence values of 75% but the reason for that is that we're using a sample so we don't have the complete picture which results in the occurance of itemsets being substantially lower than the occurance of individual items. In reality we would reject these association rules but for the purposes of the project lets take a look at the top 3 non reciprocal rules
+The highest confidence we have for any association rule is 1.1%. This is much lower than typical minimum confidence values of 75% but the reason for that is that we're using a sample so we don't have the complete picture which results in the occurrence of itemsets being substantially lower than the occurrence of individual items. In reality we would reject these association rules but for the purposes of the project lets take a look at the top 3 non reciprocal rules
 
 |Item A| Item B| Confidence|
 |-|-|-|
@@ -501,7 +501,7 @@ Even though our confidence values are low, we can see that these associations ma
 In our exploratory data analysis, we found that there was a large gap in geolocation clustering between the majority of our customers and the majority of our sellers. This led to a large increase in delivery times for orders to our second biggest customer territory. To increase customer satisfaction and reduce shipping costs, the recommendation we made was to open a distribution centre closer to this customer hub. This would offer a 78% reduction in delivery time. 
 <br>
 
-We used the Equivalence Class Clustering and bottom-up Lattice Traversal Associate Rule Learning algorithm to offer product category recommendations that will increase cross-sell conversions. Our top 3 recommendations are: bed, bath, and tables when furniture decor is purchased; cool stuff when baby products are purchased; and toys when baby products are purchased. 
+We used the Equivalence Class Clustering and bottom-up Lattice Traversal Associate Rule Learning algorithm to offer product category recommendations that will increase cross-sell conversions. Our top 3 recommendations are: bed, bath, and tables when furniture décor is purchased; cool stuff when baby products are purchased; and toys when baby products are purchased. 
 
 
 <br>
