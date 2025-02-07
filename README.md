@@ -7,7 +7,7 @@
 We're going to be pushing SQL (Snowflake) to its limits by applying advanced analytic techniques that are better suited for languages like Python or R. Applying them in SQL forces us to gain a deeper understanding of any algorithms we use instead of relying on pre-built libraries or functions. It'll also improve our day to day SQL ability the same way intense exercise at the gym can make day to day stuff like climbing a flight of stairs easier. There's also several use cases where working directly in SQL is faster and cheaper than developing infrastructure for other languages. 
 <br>
 
-We will conduct an Exploratory Data Analysis and implement an Associate Rule Learning Algorithm (Equivalence Class Clustering and bottom-up Lattice Traversal). 
+We will conduct an Exploratory Data Analysis and implement an Association Rule Learning Algorithm (Equivalence Class Clustering and bottom-up Lattice Traversal). 
 <br>
 
 The dataset we're using is a sample of real transaction data from a Brazilian E-Commerce Site. 
@@ -501,7 +501,7 @@ Even though our confidence values are low, we can see that these associations ma
 In our exploratory data analysis, we found that there was a large gap in geolocation clustering between the majority of our customers and the majority of our sellers. This led to a large increase in delivery times for orders to our second biggest customer territory. To increase customer satisfaction and reduce shipping costs, the recommendation we made was to open a distribution centre closer to this customer hub. This would offer a 78% reduction in delivery time. 
 <br>
 
-We used the Equivalence Class Clustering and bottom-up Lattice Traversal Associate Rule Learning algorithm to offer product category recommendations that will increase cross-sell conversions. Our top 3 recommendations are: bed, bath, and tables when furniture décor is purchased; cool stuff when baby products are purchased; and toys when baby products are purchased. 
+We used the Equivalence Class Clustering and bottom-up Lattice Traversal Association Rule Learning algorithm to offer product category recommendations that will increase cross-sell conversions. Our top 3 recommendations are: bed, bath, and tables when furniture décor is purchased; cool stuff when baby products are purchased; and toys when baby products are purchased. 
 
 
 <br>
